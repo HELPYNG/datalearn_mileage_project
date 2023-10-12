@@ -5,8 +5,43 @@
 
 body {
     text-align: center;
-    background-color: #434444;
+    
 }
+
+
+/* DARK-MODE */
+.dark-mode .grafico1,
+.dark-mode .grafico2,
+.dark-mode .grafico3,
+.dark-mode .grafico4,
+.dark-mode .info {
+    background-color: #686d6e;
+}
+
+.dark-mode .curso1,
+.dark-mode .curso2,
+.dark-mode .curso3 {
+    background-color: #686d6e;
+}
+
+.dark-mode header {
+    background-color: #4f5d6b;
+}
+
+.dark-mode th {
+    background-color: #4f5d6b;
+}
+
+.dark-mode td {
+    background-color: #798997;
+}
+
+.dark-mode .menu {
+    background-color: #686d6e;
+}
+
+/*-----------------------------------*/
+
 
 
 .menu { grid-area: menu; }
@@ -18,7 +53,8 @@ body {
 .curso1 {grid-area: curso1;}
 .curso2 {grid-area: curso2;}
 .curso3 {grid-area: curso3;}
-.curso4 {grid-area: curso4;}
+
+/*Grid Alunos*/
 .container {
     display: grid;
     grid-template-areas:
@@ -36,6 +72,46 @@ body {
     grid-template-rows: min-content auto min-content;
 }
 
+.grafico1 {
+    margin-top: 5px;
+    border-radius: 20px;
+    width: 800px;
+    height: 400px;
+    background-color:  #c2c7ca;
+}
+
+.grafico2 {
+    margin-top: 5px;
+    border-radius: 20px;
+    width: 800px;
+    height: 400px;
+    margin-right: 15px;
+    background-color:  #c2c7ca;
+}
+
+.grafico3 {
+    margin-bottom: 10px;
+    border-radius: 20px;
+    width: 800px;
+    height: 330px;
+    background-color:  #c2c7ca;
+}
+
+.grafico4 {
+    margin-bottom: 10px;
+    border-radius: 20px;
+    width: 800px;
+    height: 330px;
+    margin-right: 15px;
+    background-color:  #c2c7ca;
+}
+
+/*----------------------------------*/
+
+/*Grid Professores*/
+/*----------------------------------*/
+
+/*Grid Cursos*/
 .containerCursos {
     display: grid;
     grid-template-areas:
@@ -52,6 +128,35 @@ body {
     
 }
 
+.curso1 {
+    border-radius: 20px;
+    width: 98%;
+    height: 240px;
+    margin-right: 15px;
+    margin-left: 5px;
+    background-color:  #c2c7ca;
+}
+
+.curso2 {
+    
+    border-radius: 20px;
+    width: 98%;
+    height: 240px;
+    margin-right: 15px;
+    margin-left: 5px;
+    background-color:  #c2c7ca;
+}
+
+.curso3 {
+    border-radius: 20px;
+    width: 98%;
+    height: 240px;
+    margin-right: 15px;
+    margin-left: 5px;
+    background-color:  #c2c7ca;
+}
+/*----------------------------------*/
+
 
 
 .menu {
@@ -59,7 +164,7 @@ body {
     margin-left: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
-    background-color: #686d6e;
+    background-color: #c2c7ca;
 }
 
 ul {
@@ -83,71 +188,12 @@ ul li:hover a {
 }
 
 
-.grafico1 {
-    margin-top: 5px;
-    border-radius: 20px;
-    width: 800px;
-    height: 400px;
-    background-color:  #686d6e;
-}
 
-.grafico2 {
-    margin-top: 5px;
-    border-radius: 20px;
-    width: 800px;
-    height: 400px;
-    margin-right: 15px;
-    background-color:  #686d6e;
-}
 
-.grafico3 {
-    margin-bottom: 10px;
-    border-radius: 20px;
-    width: 800px;
-    height: 330px;
-    background-color:  #686d6e;
-}
-
-.grafico4 {
-    margin-bottom: 10px;
-    border-radius: 20px;
-    width: 800px;
-    height: 330px;
-    margin-right: 15px;
-    background-color:  #686d6e;
-}
-
-.curso1 {
-    border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #686d6e;
-}
-
-.curso2 {
-    
-    border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #686d6e;
-}
-
-.curso3 {
-    border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #686d6e;
-}
 
 .info {
     height: 185px;
-    background-color: #686d6e;
+    background-color: #c2c7ca;
     margin-right: 15px;
     margin-top: 10px;
 }
@@ -181,15 +227,20 @@ table {
 }
 
 th {
-    background-color: #4f5d6b
+    background-color: #777b80;
 }
 
 td {
-    background-color: #798997;
+    background-color: #cccfd1;
 }
 
 header {
-    background-color: #4f5d6b;
+    background-color: #777b80;
     height: 15%;
 }
+
+li {
+    cursor: pointer;
+}
+
 
