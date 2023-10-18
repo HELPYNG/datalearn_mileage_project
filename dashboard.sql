@@ -29,29 +29,29 @@ CREATE TABLE ALUNO_TESTES (
     FOREIGN KEY (TESTE_ID) REFERENCES TESTES(ID)
 );
 
-INSERT INTO ALUNOS (NOME, IDADE) VALUES
-    ('João', 20),
-    ('Maria', 22),
-    ('Pedro', 21),
-    ('Ana', 23);
-
 INSERT INTO CURSOS (NOME) VALUES
-    ('Matemática'),
-    ('História'),
-    ('Ciência da Computação'),
-    ('Biologia');
-
+    ('Java'),
+    ('JavaScript'),
+    ('Python'),
+    ('C#');
+    
 INSERT INTO TESTES (CURSO_ID, NOME) VALUES
-    (1, 'Prova de Álgebra'),
-    (1, 'Prova de Geometria'),
-    (3, 'Prova de Programação'),
-    (4, 'Prova de Biologia Celular');
+    (1, 'Teste de Java 1'),
+    (1, 'Teste de Java 2'),
+    (2, 'Teste de JavaScript 1'),
+    (2, 'Teste de JavaScript 2'),
+    (3, 'Teste de Python 1'),
+    (3, 'Teste de Python 2'),
+    (4, 'Teste de C# 1'),
+    (4, 'Teste de C# 2');
 
 DELIMITER $$
 
 DELIMITER $$
 
 SET SESSION sql_mode='';
+
+
 DELIMITER $$
 
 CREATE PROCEDURE InsertRandomData()
@@ -59,27 +59,26 @@ BEGIN
     SET @i = 1;
 
     WHILE @i <= 200 DO
-        -- Inserir alunos aleatórios
         INSERT INTO ALUNOS (NOME, IDADE) VALUES
             (CONCAT('Aluno_', @i), FLOOR(RAND() * 10) + 18);
 
         SET @aluno_id = LAST_INSERT_ID();
 
-        -- Definir o número aleatório de testes a serem inseridos
         SET @num_testes = FLOOR(RAND() * 4) + 1;
 
-        -- Loop para inserir testes aleatórios
         SET @j = 1;
 
         WHILE @j <= @num_testes DO
+            SET @curso_id = FLOOR(RAND() * 4) + 1;
+
+            SET @teste_id = (SELECT ID FROM TESTES WHERE CURSO_ID = @curso_id ORDER BY RAND() LIMIT 1);
+
             INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO)
             SELECT
                 @aluno_id,
-                TESTES.ID,
+                @teste_id,
                 FLOOR(RAND() * 10) + 1,
-                FLOOR(RAND() * 100) -- Progresso do curso aleatório
-            FROM TESTES
-            ORDER BY RAND()
+                FLOOR(RAND() * 100)
             LIMIT 1;
 
             SET @j = @j + 1;
@@ -89,6 +88,16 @@ BEGIN
     END WHILE;
 END$$
 
-DELIMITER ;
-
 CALL InsertRandomData();
+SELECT
+    ALUNOS.NOME AS ALUNO,
+    CURSOS.NOME AS CURSO,
+    TESTES.NOME AS TESTE,
+    ALUNO_TESTES.NOTA
+FROM ALUNO_TESTES
+JOIN ALUNOS ON ALUNOS.ID = ALUNO_TESTES.ALUNO_ID
+JOIN TESTES ON TESTES.ID = ALUNO_TESTES.TESTE_ID
+JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID;
+
+select * from alunos
+
