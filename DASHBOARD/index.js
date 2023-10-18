@@ -20,3 +20,4 @@ document.addEventListener('DOMContentLoaded', function () {
         body.style.backgroundColor = '#434444';
     }
 });
+
