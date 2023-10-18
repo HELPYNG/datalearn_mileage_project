@@ -2,13 +2,15 @@ const conectar = async ()=>{
     if(global.conexao && global.conexao.state != 'disconected')
         return global.conexao
     const mysql=require('mysql2/promise')
-    const con=mysql.createConnection("mysql://root:senha@localhost:3306/banco")
+    const con=mysql.createConnection("mysql://root:SENHA@localhost:3306/dashboard")
     console.log('Conectou ao banco')
     global.conexao=con
     return con
 }
 
-conectar() //faça com que vire comentário depois de verificar no node js
+module.exports = {conectar};
+
+//conectar() faça com que vire comentário depois de verificar no node js
 
 /*const nomeDaVariavel = async()={
     const con=await conectar()
@@ -48,5 +50,19 @@ conectar() //faça com que vire comentário depois de verificar no node js
     const [linhas] = await.con.query('SELECT * FROM nomeDaVariavel')
     return await linhas
 } */
+const obterMediasDasNotas = async () => {
+    const con = await conectar();
+    const [rows] = await con.query(`
+        SELECT CURSOS.NOME AS CURSO_NOME, TESTES.NOME AS TESTE_NOME, AVG(ALUNO_TESTES.NOTA) AS MEDIA_NOTAS
+        FROM ALUNO_TESTES
+        JOIN TESTES ON ALUNO_TESTES.TESTE_ID = TESTES.ID
+        JOIN CURSOS ON TESTES.CURSO_ID = CURSOS.ID
+        GROUP BY CURSOS.NOME, TESTES.NOME
+    `);
+    return rows;
+}
+
+module.exports = {obterMediasDasNotas};
+
 
 module.exports = {/*'nomeDaVariavel,insereVariavel,atualizaVariavel,deletaVariavel'*/}
