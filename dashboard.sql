@@ -29,6 +29,37 @@ CREATE TABLE ALUNO_TESTES (
     FOREIGN KEY (TESTE_ID) REFERENCES TESTES(ID)
 );
 
+CREATE TABLE Visualizacoes (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  Data DATE NOT NULL,
+  Visualizacoes INT NOT NULL
+);
+
+
+INSERT INTO Visualizacoes (Data, Visualizacoes) VALUES
+  ('2023-10-01', 100),
+  ('2023-10-02', 150),
+  ('2023-10-03', 120),
+  ('2023-10-04', 180),
+  ('2023-10-05', 130),
+  ('2023-10-06', 90),
+  ('2023-10-07', 200),
+  ('2023-10-08', 170),
+  ('2023-10-09', 110),
+  ('2023-10-10', 160),
+  ('2023-10-11', 140),
+  ('2023-10-12', 190),
+  ('2023-10-13', 120),
+  ('2023-10-14', 170),
+  ('2023-10-15', 140),
+  ('2023-10-16', 130),
+  ('2023-10-17', 210),
+  ('2023-10-18', 180),
+  ('2023-10-19', 150),
+  ('2023-10-20', 170);
+
+
+
 INSERT INTO CURSOS (NOME) VALUES
     ('Java'),
     ('JavaScript'),
