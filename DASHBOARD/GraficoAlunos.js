@@ -1,91 +1,125 @@
 document.addEventListener('DOMContentLoaded', () => {
-    Highcharts.chart('grafico1', {
-        chart: {
-            type: 'bar',
-            backgroundColor: "#c2c7ca"
-        },
-        title: {
-            text: 'Exemplo de Gráfico 1'
-        },
-        xAxis: {
-            categories: ['Categoria 1', 'Categoria 2', 'Categoria 3']
-        },
-        yAxis: {
-            title: {
-                text: 'Valores'
+    fetch('/obterMediasDasNotas')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados. Status: ' + response.status);
             }
-        },
-        series: [{
-            name: 'Série 1',
-            data: [5, 10, 7]
-        }]
-    });
+            return response.json();
+        })
+        .then(data => {
+            const chartData = data.map(item => ({
+                name: item.CURSO_NOME,
+                y: parseFloat(item.MEDIA_NOTAS)
+            }));
 
-    
-    Highcharts.chart('grafico2', {
-        chart: {
-            type: 'pie',
-            backgroundColor: "#c2c7ca"
-        },
-        title: {
-            text: 'Exemplo de Gráfico 2'
-        },
-        series: [{
-            name: 'Valores',
-            data: [
-                ['Categoria A', 45],
-                ['Categoria B', 30],
-                ['Categoria C', 25]
-            ]
-        }]
-    });
-
-    // Gráfico de Linha (grafico3)
-    Highcharts.chart('grafico3', {
-        chart: {
-            type: 'line',
-            backgroundColor: "#c2c7ca"
-        },
-        title: {
-            text: 'Exemplo de Gráfico 3'
-        },
-        xAxis: {
-            categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai']
-        },
-        yAxis: {
-            title: {
-                text: 'Valores'
-            }
-        },
-        series: [{
-            name: 'Série 1',
-            data: [10, 15, 12, 8, 20]
-        }]
+            Highcharts.chart('grafico1', {
+                chart: {
+                    type: 'column',
+                    backgroundColor: "#c2c7ca"
+                },
+                title: {
+                    text: 'Média das notas'
+                },
+                xAxis: {
+                    categories: chartData.map(item => item.name)
+                },
+                yAxis: {
+                    title: {
+                        text: 'Média de Notas'
+                    }
+                },
+                series: [{
+                    name: 'Média de Notas',
+                    data: chartData
+                }]
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados:', error);
+        });
 });
 
 
-
-    Highcharts.chart('grafico4', {
-        chart: {
-            type: 'area',
-            backgroundColor: "#c2c7ca"
-        },
-        title: {
-            text: 'Exemplo de Gráfico de Área'
-        },
-        xAxis: {
-            categories: ['Ano 1', 'Ano 2', 'Ano 3', 'Ano 4', 'Ano 5']
-        },
-        yAxis: {
-            title: {
-                text: 'Valores'
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/obterProgressoDosAlunos')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados. Status: ' + response.status);
             }
-        },
-        series: [{
-            name: 'Série 1',
-            data: [30, 45, 60, 40, 55]
-        }]
+            return response.json();
+        })
+        .then(data => {
+            const chartData = data.map(item => ({
+                name: item.CURSO_NOME,
+                y: parseFloat(item.MEDIA_PROGRESSO_CURSO) 
+            }));
+
+            Highcharts.chart('grafico2', {
+                chart: {
+                    type: 'bar',
+                    backgroundColor: "#c2c7ca"
+                },
+                title: {
+                    text: 'Média de Progresso dos Alunos por Curso' 
+                },
+                xAxis: {
+                    categories: chartData.map(item => item.name)
+                },
+                yAxis: {
+                    title: {
+                        text: 'Média de Progresso %'
+                    }
+                },
+                series: [{
+                    name: 'Média de Progresso',
+                    data: chartData
+                }]
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados:', error);
+        });
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/obterVisualizacoes')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados. Status: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const chartData = data.map(item => ({
+                name: new Date(item.Data).toLocaleDateString(),
+                y: parseInt(item.TotalVisualizacoes, 10)
+            }));
+
+            Highcharts.chart('grafico3', {
+                chart: {
+                    type: 'area',
+                    backgroundColor: "#c2c7ca"
+                },
+                title: {
+                    text: 'Visualizações Java'
+                },
+                xAxis: {
+                    categories: chartData.map(item => item.name)
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total de Visualizações'
+                    }
+                },
+                series: [{
+                    name: 'Visualizações',
+                    data: chartData.map(item => item.y)
+                }]
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados:', error);
+        });
 });
+
