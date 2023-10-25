@@ -10,7 +10,7 @@ const conectar = async ()=>{
 
 module.exports = {conectar};
 
-//conectar() faça com que vire comentário depois de verificar no node js
+conectar() //faça com que vire comentário depois de verificar no node js
 
 /*const nomeDaVariavel = async()={
     const con=await conectar()
@@ -50,19 +50,69 @@ module.exports = {conectar};
     const [linhas] = await.con.query('SELECT * FROM nomeDaVariavel')
     return await linhas
 } */
+// db.js
+
 const obterMediasDasNotas = async () => {
-    const con = await conectar();
-    const [rows] = await con.query(`
-        SELECT CURSOS.NOME AS CURSO_NOME, TESTES.NOME AS TESTE_NOME, AVG(ALUNO_TESTES.NOTA) AS MEDIA_NOTAS
+    try {
+      const con = await conectar();
+      const [rows] = await con.query(`
+        SELECT CURSOS.NOME AS CURSO_NOME, AVG(ALUNO_TESTES.NOTA) AS MEDIA_NOTAS
         FROM ALUNO_TESTES
         JOIN TESTES ON ALUNO_TESTES.TESTE_ID = TESTES.ID
         JOIN CURSOS ON TESTES.CURSO_ID = CURSOS.ID
-        GROUP BY CURSOS.NOME, TESTES.NOME
-    `);
-    return rows;
+        GROUP BY CURSOS.NOME;
+      `);
+      console.log(rows);
+      return rows;
+    } catch (error) {
+      console.error('Erro ao obter as médias das notas:', error);
+      throw error;
+    }
+  }
+  
+
+
+
+
+  const obterProgressoDosAlunos = async () => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(`
+            SELECT CURSOS.NOME AS CURSO_NOME, AVG(ALUNO_TESTES.PROGRESSO_CURSO) AS MEDIA_PROGRESSO_CURSO
+            FROM ALUNO_TESTES
+            JOIN TESTES ON ALUNO_TESTES.TESTE_ID = TESTES.ID
+            JOIN CURSOS ON TESTES.CURSO_ID = CURSOS.ID
+            GROUP BY CURSOS.NOME
+        `);
+        console.log(rows);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao obter a média do progresso dos alunos por curso:', error);
+        throw error;
+    }
 }
 
-module.exports = {obterMediasDasNotas};
+
+const obterVisualizacoes = async () => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(`
+            SELECT Data, SUM(Visualizacoes) AS TotalVisualizacoes
+            FROM Visualizacoes
+            GROUP BY Data
+            ORDER BY Data;
+        `);
+        console.log(rows);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao obter dados de visualizações:', error);
+        throw error;
+    }
+};
+  
 
 
-module.exports = {/*'nomeDaVariavel,insereVariavel,atualizaVariavel,deletaVariavel'*/}
+module.exports = { obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes };
+
+
+
