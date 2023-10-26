@@ -2,7 +2,7 @@ const conectar = async ()=>{
     if(global.conexao && global.conexao.state != 'disconected')
         return global.conexao
     const mysql=require('mysql2/promise')
-    const con=mysql.createConnection("mysql://root:SENHA@localhost:3306/dashboard")
+    const con=mysql.createConnection("mysql://root:1234@localhost:3306/dashboard")
     console.log('Conectou ao banco')
     global.conexao=con
     return con
@@ -62,7 +62,6 @@ const obterMediasDasNotas = async () => {
         JOIN CURSOS ON TESTES.CURSO_ID = CURSOS.ID
         GROUP BY CURSOS.NOME;
       `);
-      console.log(rows);
       return rows;
     } catch (error) {
       console.error('Erro ao obter as médias das notas:', error);
@@ -70,9 +69,6 @@ const obterMediasDasNotas = async () => {
     }
   }
   
-
-
-
 
   const obterProgressoDosAlunos = async () => {
     try {
@@ -102,7 +98,6 @@ const obterVisualizacoes = async () => {
             GROUP BY Data
             ORDER BY Data;
         `);
-        console.log(rows);
         return rows;
     } catch (error) {
         console.error('Erro ao obter dados de visualizações:', error);
@@ -110,9 +105,26 @@ const obterVisualizacoes = async () => {
     }
 };
   
+const obterNotaPorProgresso = async () => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(`
+            SELECT ALUNOS.NOME AS ALUNO, CURSOS.NOME AS CURSO, AVG(ALUNO_TESTES.NOTA) AS MEDIA_NOTAS, AVG(ALUNO_TESTES.PROGRESSO_CURSO) AS MEDIA_PROGRESSO
+            FROM ALUNO_TESTES
+            JOIN ALUNOS ON ALUNOS.ID = ALUNO_TESTES.ALUNO_ID
+            JOIN TESTES ON TESTES.ID = ALUNO_TESTES.TESTE_ID
+            JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID
+            GROUP BY ALUNOS.NOME, CURSOS.NOME;
+        `);
+        console.log(rows);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao obter dados:', error);
+        throw error;
+    }
+};
 
 
-module.exports = { obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes };
-
+module.exports = { obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso };
 
 

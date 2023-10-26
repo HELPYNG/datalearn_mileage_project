@@ -3,6 +3,7 @@ const app = express();
 const { obterMediasDasNotas } = require('./db');
 const { obterProgressoDosAlunos } = require('./db');
 const { obterVisualizacoes } = require('./db');
+const { obterNotaPorProgresso } = require('./db');
 const path = require('path');
 
 
@@ -26,14 +27,14 @@ app.get('/obterMediasDasNotas', async (req, res) => {
     }
 });
 
-app.get('/obterProgressoDosAlunos', async (req, res) => {
+/*app.get('/obterProgressoDosAlunos', async (req, res) => {
     try {
         const prog = await obterProgressoDosAlunos();
         res.json(prog);
     } catch (error) {
         res.status(500).json({ error: 'Erro ao obter o progresso dos alunos'});
     }
-});
+});*/
 
 
 app.get('/obterVisualizacoes', async (req, res) => {
@@ -45,6 +46,14 @@ app.get('/obterVisualizacoes', async (req, res) => {
     }
 });
 
+app.get('/obterNotaPorProgresso', async (req, res) =>{
+    try {
+        const prog =  await obterNotaPorProgresso();
+        res.json(prog);
+    } catch (error) {
+        res.status(500).json({error: 'Erro ao obter o progresso e a nota dos alunos'});
+    }
+})
 
 app.listen(3001, function() {
     console.log("Servidor Rodando na URL http://localhost:3001/alunos.html");
