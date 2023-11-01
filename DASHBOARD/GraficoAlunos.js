@@ -12,9 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 y: parseFloat(item.MEDIA_NOTAS)
             }));
 
-
-            const CoresGraficos = cores(chartData);
-
             Highcharts.chart('grafico1', {
                 chart: {
                     type: 'column',
@@ -33,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 series: [{
                     name: 'Média de Notas',
-                    data: CoresGraficos
+                    data: chartData
                 }]
             });
         })
@@ -44,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/obterNotaPorProgresso')
+    fetch('/obterProgressoDosAlunos')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erro ao obter dados. Status: ' + response.status);
@@ -54,43 +51,27 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const chartData = data.map(item => ({
                 name: item.CURSO_NOME,
-                x: parseFloat(item.MEDIA_PROGRESSO),
-                y: parseFloat(item.MEDIA_NOTAS)
+                y: parseFloat(item.MEDIA_PROGRESSO_CURSO) 
             }));
 
             Highcharts.chart('grafico2', {
                 chart: {
-                    type: 'scatter',
+                    type: 'bar',
                     backgroundColor: "#c2c7ca"
                 },
                 title: {
-                    text: 'Nota por Progresso do Curso' 
+                    text: 'Média de Progresso dos Alunos por Curso' 
                 },
                 xAxis: {
+                    categories: chartData.map(item => item.name)
+                },
+                yAxis: {
                     title: {
                         text: 'Média de Progresso %'
                     }
                 },
-                yAxis: {
-                    title: {
-                        text: 'Média de Notas'
-                    }
-                },
-                plotOptions: {
-                    scatter: {
-                        marker: {
-                            radius: 5,
-                            states: {
-                                hover: {
-                                    enabled: true,
-                                    lineColor: 'rgb(100,100,100)'
-                                }
-                            }
-                        }
-                    }
-                },
                 series: [{
-                    name: 'Java',
+                    name: 'Média de Progresso',
                     data: chartData
                 }]
             });
@@ -142,22 +123,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-
-
-
-
-function cores(chartData) {
-    return chartData.map(item =>{
-        let color;
-        if(item.name === 'Java') {
-            color = 'orange'
-        } else if(item.name == 'Python') {
-            color = 'green'
-        } else if(item.name == 'C#') {
-            color = ''
-        }
-
-        item.color = color;
-        return item;
-    });
-}
