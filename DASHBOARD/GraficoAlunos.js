@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 y: parseFloat(item.MEDIA_NOTAS)
             }));
 
+
+            const CoresGraficos = cores(chartData);
+
             Highcharts.chart('grafico1', {
                 chart: {
                     type: 'column',
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 series: [{
                     name: 'Média de Notas',
-                    data: chartData
+                    data: CoresGraficos
                 }]
             });
         })
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/obterProgressoDosAlunos')
+    fetch('/obterNotaPorProgresso')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erro ao obter dados. Status: ' + response.status);
@@ -49,37 +52,59 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            const chartData = data.map(item => ({
-                name: item.CURSO_NOME,
-                y: parseFloat(item.MEDIA_PROGRESSO_CURSO) 
-            }));
-
+            const cursos = [...new Set(data.map(item => item.CURSO))];
+            const series = cursos.map(curso => {
+                const cursoData = data.filter(item => item.CURSO === curso);
+                return {
+                    name: curso,
+                    data: cursoData.map(item => ({
+                        name: item.ALUNO,
+                        x: parseFloat(item.MEDIA_PROGRESSO),
+                        y: parseFloat(item.MEDIA_NOTAS)
+                    }))
+                };
+            });
             Highcharts.chart('grafico2', {
                 chart: {
-                    type: 'bar',
+                    type: 'scatter',
                     backgroundColor: "#c2c7ca"
                 },
                 title: {
-                    text: 'Média de Progresso dos Alunos por Curso' 
+                    text: 'Nota por Progresso do Curso'
                 },
                 xAxis: {
-                    categories: chartData.map(item => item.name)
-                },
-                yAxis: {
                     title: {
                         text: 'Média de Progresso %'
                     }
                 },
-                series: [{
-                    name: 'Média de Progresso',
-                    data: chartData
-                }]
+                yAxis: {
+                    title: {
+                        text: 'Média de Notas'
+                    },
+                    max:10
+                },
+                plotOptions: {
+                    scatter: {
+                        marker: {
+                            radius: 5,
+                            states: {
+                                hover: {
+                                    enabled: true,
+                                    lineColor: 'rgb(100,100,100)'
+                                }
+                            }
+                        }
+                    }
+                },
+                series: series
             });
         })
         .catch(error => {
             console.error('Erro ao obter dados:', error);
         });
 });
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,10 +116,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            const chartData = data.map(item => ({
-                name: new Date(item.Data).toLocaleDateString(),
-                y: parseInt(item.TotalVisualizacoes, 10)
-            }));
+            const cursos = [...new Set(data.map(item => item.Curso))];
+            const series = cursos.map(curso => {
+                const cursoData = data.filter(item => item.Curso === curso);
+                console.log(curso, cursoData);
+                return {
+                    name: curso,
+                    data: cursoData.map(item => ({
+                        name: new Date(item.Data).toLocaleDateString(),
+                        y: parseInt(item.TotalVisualizacoes, 10)
+                    }))
+                };
+            });
+
+            console.log(series);
 
             Highcharts.chart('grafico3', {
                 chart: {
@@ -102,20 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: "#c2c7ca"
                 },
                 title: {
-                    text: 'Visualizações Java'
+                    text: 'Visualizações Diárias por Curso'
                 },
                 xAxis: {
-                    categories: chartData.map(item => item.name)
+                    categories: series[0].data.map(item => item.name)
                 },
                 yAxis: {
                     title: {
                         text: 'Total de Visualizações'
                     }
                 },
-                series: [{
-                    name: 'Visualizações',
-                    data: chartData.map(item => item.y)
-                }]
+                plotOptions: {
+                    area: {
+                        marker: {
+                            radius: 5,
+                            states: {
+                                hover: {
+                                    enabled: true,
+                                    lineColor: 'rgb(100,100,100)'
+                                }
+                            }
+                        }
+                    }
+                },
+                series: series
             });
         })
         .catch(error => {
@@ -123,3 +168,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
+
+
+
+
+
+function cores(chartData) {
+    return chartData.map(item =>{
+        let color;
+        if(item.name === 'Java') {
+            color = 'blue'
+        } else if(item.name == 'Python') {
+            color = 'green'
+        } else if(item.name == 'C#') {
+            color = ''
+        } else if(item.name == 'JavaScript') {
+            color = 'orange'
+        }
+
+        item.color = color;
+        return item;
+    });
+}
