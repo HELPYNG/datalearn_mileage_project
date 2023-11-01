@@ -2,7 +2,7 @@ const conectar = async ()=>{
     if(global.conexao && global.conexao.state != 'disconected')
         return global.conexao
     const mysql=require('mysql2/promise')
-    const con=mysql.createConnection("mysql://root:1234@localhost:3306/dashboard")
+    const con=mysql.createConnection("mysql://root:Cossiolo1@localhost:3306/dashboard")
     console.log('Conectou ao banco')
     global.conexao=con
     return con
@@ -93,17 +93,20 @@ const obterVisualizacoes = async () => {
     try {
         const con = await conectar();
         const [rows] = await con.query(`
-            SELECT Data, SUM(Visualizacoes) AS TotalVisualizacoes
+            SELECT CURSOS.NOME AS Curso, Data, SUM(Visualizacoes) AS TotalVisualizacoes
             FROM Visualizacoes
-            GROUP BY Data
-            ORDER BY Data;
+            JOIN CURSOS ON CURSOS.ID = Visualizacoes.CURSO_ID
+            GROUP BY CURSOS.NOME, Data
+            ORDER BY Curso, Data;
         `);
         return rows;
     } catch (error) {
-        console.error('Erro ao obter dados de visualizações:', error);
+        console.error('Erro ao obter dados de visualizações diárias por curso:', error);
         throw error;
     }
 };
+
+
   
 const obterNotaPorProgresso = async () => {
     try {
