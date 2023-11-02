@@ -1,24 +1,25 @@
-(async ()=>{
-    const db=require('./db')
-    //console.log('Inserir nova variavel')
-    //await db.insereVariavel({nome:'nome',idade:'20'})
-    //const nome='nome1'
-    //const idade='19'
+function darkMode() {
+    var body = document.body;
+    body.classList.toggle("dark-mode");
 
-    //console.log('Obter todas as variaveis')
-    //const variaveis=await db.nomeDaVariavel()
-    //console.log(variaveis)
+    var dark_mode = body.classList.contains("dark-mode");
+    if(dark_mode) {
+        body.style.backgroundColor = '#434444';    
+        localStorage.setItem('darkMode', 'ativado');
+    } else {
+        body.style.backgroundColor = '';
+        localStorage.setItem('darkMode', 'desativado');
+    }   
+}
 
-    
-    //console.log('Atualizar variavel')
-    //await db.insereVariavel({nome:'nome',idade:'20'})
-    //const nome='nome1'
-    //const idade='19'
-    //const id=2
-    //await db.atualizaVariavel({'variavel' + id + 'atualizado'})
+document.addEventListener('DOMContentLoaded', function () {
+    var body = document.body;
+    var darkModeStatus = localStorage.getItem('darkMode');
+    if (darkModeStatus === 'ativado') {
+        body.classList.add('dark-mode');
+        body.style.backgroundColor = '#434444';
+    }
+});
 
-    //const id=3
-    //console.log('deletar variavel')
-    //await db.atualizaVariavel({'variavel' + id + 'deletado'})
-})()
-//comando node index no node.js
+
+

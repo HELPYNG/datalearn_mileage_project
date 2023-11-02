@@ -52,6 +52,7 @@ body {
 .curso1 {grid-area: curso1;}
 .curso2 {grid-area: curso2;}
 .curso3 {grid-area: curso3;}
+.curso4 {grid-area: curso4;}
 
 /*Grid Alunos*/
 .container {
@@ -107,10 +108,10 @@ body {
 .containerCursos {
     display: grid;
     grid-template-areas:
-      'menu info info info info info info'
-      'menu curso1 curso1 curso1 curso1 curso1 curso1'
+      'menu curso1 curso1 curso3 curso3 curso3 curso3'
+      'menu curso1 curso1 curso3 curso3 curso3 curso3'
       'menu curso2 curso2 curso2 curso2 curso2 curso2'
-      'menu curso3 curso3 curso3 curso3 curso3 curso3'
+      'menu curso2 curso2 curso2 curso2 curso2 curso2'
       ;
 
     column-gap: 10px;
@@ -121,32 +122,26 @@ body {
 }
 
 .curso1 {
+    background-color: #c2c7ca;
+    margin-top: 10px;
     border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #c2c7ca;
 }
 
 .curso2 {
-    
+    background-color: #c2c7ca;
+    margin-top: 10px;
+    margin-bottom: 15px;
     border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #c2c7ca;
 }
 
 .curso3 {
+    background-color: #c2c7ca;
+    margin-top: 10px;
+    margin-right: 10px;
     border-radius: 20px;
-    width: 98%;
-    height: 240px;
-    margin-right: 15px;
-    margin-left: 5px;
-    background-color:  #c2c7ca;
 }
+
+
 /*----------------------------------*/
 
 
@@ -237,7 +232,7 @@ li {
 
 
 .button {
-    background-color: black;
+    background-image: linear-gradient(288deg,#000000,#545353,#7c7a79 60%, #ABABAB);
     border: none;
     border-radius: 10px;
     border-color: #777b80;
@@ -264,9 +259,11 @@ li {
     box-shadow: 0px 0px 10px 1px #000000;
     margin-bottom: 30px;
     padding: 20px; 
+    background-image: linear-gradient(144deg,#000000,#545353,#7c7a79 60%, #ABABAB);
 }
 
 .comum{
+    background-image: linear-gradient(144deg,#000000,#545353,#7c7a79 60%, #ABABAB);
     text-align: center;
     font-family: monospace;
     font-size: 50px;
@@ -300,6 +297,9 @@ li {
     background-color: #cccfd1;
     text-align: center;
     padding: 10px 0;
+    border-radius: 30px 30px;
+    align-items: center;
+    justify-items: center;
     color: #777b80;
     font-weight: bold;
 }
@@ -313,4 +313,13 @@ li {
 
 .menucaixa2 a:hover {
     text-decoration: underline;
+}
+
+.body_html_Login {
+    background-image: url(https://images.unsplash.com/photo-1541140134513-85a161dc4a00?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JleSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D);
+    background-repeat: no-repeat;
+    background-position: center;
+    align-items: center;
+    justify-content: center;
+    background-size: 100%;
 }
