@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         text: 'Média de Notas'
                     }
                 },
+
+                credits: {
+                    enabled: false
+                },
+
                 series: [{
                     name: 'Média de Notas',
                     data: CoresGraficos
@@ -75,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 xAxis: {
                     title: {
                         text: 'Média de Progresso %'
-                    }
+                    },
+                    min:0,
+                    max:100
                 },
                 yAxis: {
                     title: {
@@ -96,6 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 },
+
+                credits: {
+                    enabled: false
+                },
+
                 series: series
             });
         })
@@ -160,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 },
+
+                credits: {
+                    enabled: false
+                },
+
                 series: series
             });
         })
@@ -168,6 +185,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    Highcharts.chart('curso1', {
+        chart: {
+            type: 'solidgauge',
+            backgroundColor: "#c2c7ca"
+        },
+        title: {
+            text: 'Meta'
+        },
+        pane: {
+            startAngle: -90,
+            endAngle: 90,
+            background: [{
+                backgroundColor: '#ccc',
+                borderWidth: 0,
+                outerRadius: '109%'
+            }]
+        },
+        yAxis: {
+            min: 0,
+            max: 1000,
+            title: {
+                text: 'Valor'
+            },
+            stops: [
+                [0.1, '#55BF3B'],
+                [0.5, '#DDDF0D'],
+                [0.9, '#DF5353']
+            ],
+            lineWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            labels: {
+                y: 16
+            }
+        },
+        series: [{
+            name: 'Meta',
+            data: [500],
+            dataLabels: {
+                format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                    '<span style="font-size:12px;color:silver">Valor</span></div>'
+            }
+        }]
+    });
+});
 
 
 
