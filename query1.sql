@@ -1,4 +1,3 @@
-
 INSERT INTO Visualizacoes (Data, Visualizacoes, CURSO_ID) 
 VALUES
   ('2023-10-03', 120, 1),
@@ -92,3 +91,59 @@ SELECT CURSOS.NOME AS Curso, Data, SUM(Visualizacoes) AS TotalVisualizacoes
             JOIN CURSOS ON CURSOS.ID = Visualizacoes.CURSO_ID
             GROUP BY CURSOS.NOME, Data
             ORDER BY Curso, Data;
+            
+DELIMITER $$            
+            
+CREATE PROCEDURE InsertRandomData()
+BEGIN
+    SET @i = 1;
+
+    WHILE @i <= 200 DO
+        INSERT INTO ALUNOS (NOME, IDADE) VALUES
+            (CONCAT('Aluno_', @i), FLOOR(RAND() * 10) + 18);
+
+        SET @aluno_id = LAST_INSERT_ID();
+
+        SET @num_testes = FLOOR(RAND() * 4) + 1;
+
+        SET @j = 1;
+
+        WHILE @j <= @num_testes DO
+            SET @curso_id = FLOOR(RAND() * 4) + 1;
+
+            SET @teste_id = (SELECT ID FROM TESTES WHERE CURSO_ID = @curso_id ORDER BY RAND() LIMIT 1);
+
+            SET @nota = FLOOR(RAND() * 11);
+
+            IF @nota = 0 THEN
+				SET @progresso = 0;
+			ELSEIF @nota < 2 THEN
+				SET @progresso = FLOOR(RAND() * 20 - 10);
+			ELSEIF @nota < 4 THEN
+				SET @progresso = FLOOR(RAND() * 40 - 20) + 20;
+			ELSEIF @nota < 6 THEN
+				SET @progresso = FLOOR(RAND() * 20) + 40;
+			ELSEIF @nota < 8 THEN
+				SET @progresso = FLOOR(RAND() * 20) + 60;
+			ELSE
+				SET @progresso = FLOOR(RAND() * 20) + 80;
+			END IF;
+
+
+
+            INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO)
+            VALUES (@aluno_id, @teste_id, @nota, @progresso);
+
+            SET @j = @j + 1;
+        END WHILE;
+
+        SET @i = @i + 1;
+    END WHILE;
+END$$
+
+DELIMITER ;
+
+CALL InsertRandomData();
+
+
+SELECT * FROM ALUNO_TESTES
