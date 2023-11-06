@@ -1,39 +1,65 @@
 const loginForm = document.getElementById("login_Form");
 const loginButton = document.getElementById("btn");
 
-loginButton.addEventListener("click", (e) => {
+loginButton.addEventListener("click", async (e) => {
     e.preventDefault();
     const email = loginForm.email.value;
     const password = loginForm.password.value;
 
-    if(email === "a" && password == "a"){
-        location.reload();
-        window.location.href("professores.html");
+    // Enviar os dados de login para o servidor
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: password
+            })
+        });
+
+        if (response.status === 200) {
+            alert("Login bem-sucedido!");
+            // Redirecionar para a página dos professores ou executar a ação desejada.
+            window.location.href = "professores.html";
+        } else {
+            alert("Acesso negado. Verifique suas credenciais.");
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+        alert("Erro no login. Tente novamente.");
     }
-    else{
-        alert("Acesso negado.");
-    }
-})
+});
 
 function validateFields() {
     const emailValid = isEmailValid();
     document.getElementById("recover-password-button").disabled = !emailValid;
 
+    const cpfValid = isCpfValid();
     const passwordValid = isPasswordValid();
-    document.getElementById("login-button").disabled = !emailValido || !passwordValid;
+    document.getElementById("login-button").disabled = !emailValid || !cpfValid || !passwordValid;
 }
 
 function isEmailValid() {
     const email = document.getElementById("email").value;
-    if(!email) {
+    if (!email) {
         return false;
     }
     return validateEmail(email);
 }
 
+function isCpfValid(cpf){
+    const cpf = document.getElementById("cpf").value;
+    if(!cpf) {
+        return false;
+    }
+    return true;
+}
+
 function isPasswordValid() {
-    const password = document.getElementById("senhaProfessor").value;
-    if(!password) {
+    const password = document.getElementById("senha").value;
+    if (!password) {
         return false;
     }
     return true;
@@ -43,16 +69,15 @@ function validateEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }
 
-function senha(){
-    var password = document.getElementById("senhaProfessor");
-    if(password.type === "password"){
+function senha() {
+    var password = document.getElementById("senha");
+    if (password.type === "password") {
         password.type = "text";
-    }
-    else{
+    } else {
         password.type = "password";
     }
 }
 
-function paginaProfessor(){
+function paginaProfessor() {
     window.location.href = "professores.html";
 }
