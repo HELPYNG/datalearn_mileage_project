@@ -38,7 +38,7 @@ CREATE TABLE Visualizacoes (
 );
 
 INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO) VALUES
-(1, 1, 3, 80)
+(1, 1, 3, 80);
 
 
 INSERT INTO CURSOS (NOME) VALUES
@@ -71,6 +71,11 @@ JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID;
 
 select * from alunos;
 
-select * from aluno_testes
+select * from aluno_testes;
 
-drop database dashboard
+CREATE TABLE Professores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    senha VARCHAR(255) NOT NULL,
+    cpf CHAR(11) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
