@@ -1,12 +1,48 @@
 const loginForm = document.getElementById("login_Form");
 const loginButton = document.getElementById("btn");
+const express = require('express');
+const app = express();
+const mysql = require('mysql2/promise');
+
+const dbConfig = {
+    host: '127.0.0.1',
+    user: 'root',
+    password: '1234',
+    database: 'Dashboard.sql',
+};
+
+app.use(express.json());
+
+app.post('/login', async (req, res) => {
+  const { email, cpf, senha } = req.body;
+
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const [results, fields] = await connection.execute('SELECT * FROM Usuarios WHERE email = ? AND cpf = ? AND senha = ?', [email, cpf, senha]);
+
+    if (results.length === 1) {
+      res.status(200).send('Login bem-sucedido');
+    } else {
+      res.status(401).send('Acesso negado. Verifique suas credenciais.');
+    }
+
+    await connection.end();
+  } catch (error) {
+    console.error('Erro no login:', error);
+    res.status(500).send('Erro no login. Tente novamente.');
+  }
+});
+
+app.listen(3306, () => {
+  console.log('Servidor está ouvindo na porta 3306');
+});
 
 loginButton.addEventListener("click", async (e) => {
     e.preventDefault();
     const email = loginForm.email.value;
+    const cpf = loginForm.cpf.value;
     const password = loginForm.password.value;
 
-    // Enviar os dados de login para o servidor
     try {
         const response = await fetch('/login', {
             method: 'POST',
@@ -15,13 +51,13 @@ loginButton.addEventListener("click", async (e) => {
             },
             body: JSON.stringify({
                 email: email,
+                cpf: cpf,
                 senha: password
             })
         });
 
         if (response.status === 200) {
             alert("Login bem-sucedido!");
-            // Redirecionar para a página dos professores ou executar a ação desejada.
             window.location.href = "professores.html";
         } else {
             alert("Acesso negado. Verifique suas credenciais.");
@@ -49,9 +85,9 @@ function isEmailValid() {
     return validateEmail(email);
 }
 
-function isCpfValid(cpf){
+function isCpfValid() {
     const cpf = document.getElementById("cpf").value;
-    if(!cpf) {
+    if (!cpf) {
         return false;
     }
     return true;
@@ -66,7 +102,8 @@ function isPasswordValid() {
 }
 
 function validateEmail(email) {
-    return /\S+@\S+\.\S+/.test(email);
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
 }
 
 function senha() {
@@ -76,8 +113,4 @@ function senha() {
     } else {
         password.type = "password";
     }
-}
-
-function paginaProfessor() {
-    window.location.href = "professores.html";
 }
