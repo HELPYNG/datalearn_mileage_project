@@ -24,8 +24,32 @@ const registrarProfessor = async (senha, cpf, email) => {
     }
 }
 
-module.exports = { conectar, registrarProfessor };
+const loginProfessor = async (email, senha) => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(
+            'SELECT id, senha, cpf, email FROM Professores WHERE email = ?',
+            [email]
+        );
 
+        if (rows.length > 0) {
+            const professor = rows[0];
+            if (professor.senha === senha) {
+                console.log('Login do professor bem-sucedido');
+                return professor;
+            } else {
+                console.error('Senha incorreta');
+                return null;
+            }
+        } else {
+            console.error('Professor não encontrado');
+            return null;
+        }
+    } catch (error) {
+        console.error('Erro no login do professor:', error);
+        throw error;
+    }
+}
 
 const obterMediasDasNotas = async () => {
     try {
@@ -102,7 +126,4 @@ const obterNotaPorProgresso = async () => {
     }
 };
 
-
-module.exports = { obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso };
-
-
+module.exports = { conectar, registrarProfessor, loginProfessor, obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso };
