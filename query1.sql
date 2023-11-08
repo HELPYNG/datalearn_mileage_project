@@ -92,59 +92,106 @@ SELECT CURSOS.NOME AS Curso, Data, SUM(Visualizacoes) AS TotalVisualizacoes
             GROUP BY CURSOS.NOME, Data
             ORDER BY Curso, Data;
             
-DELIMITER $$            
             
-CREATE PROCEDURE InsertRandomData()
-BEGIN
-    SET @i = 1;
+            
 
-    WHILE @i <= 200 DO
-        INSERT INTO ALUNOS (NOME, IDADE) VALUES
-            (CONCAT('Aluno_', @i), FLOOR(RAND() * 10) + 18);
+INSERT INTO VENDAS_DIARIAS (CURSO_ID, Data, Vendas) 
+VALUES
+  (1, '2023-10-03', 10),
+  (1, '2023-10-04', 15),
+  (1, '2023-10-05', 12),
+  (1, '2023-10-06', 8),
+  (1, '2023-10-07', 20),
+  (1, '2023-10-08', 25),
+  (1, '2023-10-09', 20),
+  (1, '2023-10-10', 30),
+  (1, '2023-10-11', 25),
+  (1, '2023-10-12', 35),
+  (1, '2023-10-13', 30),
+  (1, '2023-10-14', 40),
+  (1, '2023-10-15', 35),
+  (1, '2023-10-16', 42),
+  (1, '2023-10-17', 50),
+  (1, '2023-10-18', 48),
+  (1, '2023-10-19', 55),
+  (1, '2023-10-20', 60);
 
-        SET @aluno_id = LAST_INSERT_ID();
+INSERT INTO VENDAS_DIARIAS (CURSO_ID, Data, Vendas) 
+VALUES
+  (2, '2023-10-03', 5),
+  (2, '2023-10-04', 8),
+  (2, '2023-10-05', 10),
+  (2, '2023-10-06', 7),
+  (2, '2023-10-07', 12),
+  (2, '2023-10-08', 15),
+  (2, '2023-10-09', 14),
+  (2, '2023-10-10', 18),
+  (2, '2023-10-11', 17),
+  (2, '2023-10-12', 20),
+  (2, '2023-10-13', 19),
+  (2, '2023-10-14', 22),
+  (2, '2023-10-15', 24),
+  (2, '2023-10-16', 26),
+  (2, '2023-10-17', 28),
+  (2, '2023-10-18', 30),
+  (2, '2023-10-19', 32),
+  (2, '2023-10-20', 35);
 
-        SET @num_testes = FLOOR(RAND() * 4) + 1;
+INSERT INTO VENDAS_DIARIAS (CURSO_ID, Data, Vendas) 
+VALUES
+  (3, '2023-10-03', 3),
+  (3, '2023-10-04', 5),
+  (3, '2023-10-05', 7),
+  (3, '2023-10-06', 6),
+  (3, '2023-10-07', 8),
+  (3, '2023-10-08', 10),
+  (3, '2023-10-09', 12),
+  (3, '2023-10-10', 11),
+  (3, '2023-10-11', 14),
+  (3, '2023-10-12', 13),
+  (3, '2023-10-13', 15),
+  (3, '2023-10-14', 17),
+  (3, '2023-10-15', 19),
+  (3, '2023-10-16', 20),
+  (3, '2023-10-17', 22),
+  (3, '2023-10-18', 24),
+  (3, '2023-10-19', 25),
+  (3, '2023-10-20', 27);
 
-        SET @j = 1;
-
-        WHILE @j <= @num_testes DO
-            SET @curso_id = FLOOR(RAND() * 4) + 1;
-
-            SET @teste_id = (SELECT ID FROM TESTES WHERE CURSO_ID = @curso_id ORDER BY RAND() LIMIT 1);
-
-            SET @nota = FLOOR(RAND() * 11);
-
-            IF @nota = 0 THEN
-				SET @progresso = 0;
-			ELSEIF @nota < 2 THEN
-				SET @progresso = FLOOR(RAND() * 20 - 10);
-			ELSEIF @nota < 4 THEN
-				SET @progresso = FLOOR(RAND() * 40 - 20) + 20;
-			ELSEIF @nota < 6 THEN
-				SET @progresso = FLOOR(RAND() * 20) + 40;
-			ELSEIF @nota < 8 THEN
-				SET @progresso = FLOOR(RAND() * 20) + 60;
-			ELSE
-				SET @progresso = FLOOR(RAND() * 20) + 80;
-			END IF;
+INSERT INTO VENDAS_DIARIAS (CURSO_ID, Data, Vendas) 
+VALUES
+  (4, '2023-10-03', 8),
+  (4, '2023-10-04', 10),
+  (4, '2023-10-05', 12),
+  (4, '2023-10-06', 14),
+  (4, '2023-10-07', 16),
+  (4, '2023-10-08', 18),
+  (4, '2023-10-09', 20),
+  (4, '2023-10-10', 22),
+  (4, '2023-10-11', 24),
+  (4, '2023-10-12', 26),
+  (4, '2023-10-13', 28),
+  (4, '2023-10-14', 30),
+  (4, '2023-10-15', 32),
+  (4, '2023-10-16', 34),
+  (4, '2023-10-17', 36),
+  (4, '2023-10-18', 38),
+  (4, '2023-10-19', 40),
+  (4, '2023-10-20', 42);
 
 
+SELECT CURSOS.NOME AS Curso, Data, SUM(Vendas) AS TotalVendas
+FROM VENDAS_DIARIAS
+JOIN CURSOS ON CURSOS.ID = VENDAS_DIARIAS.CURSO_ID
+GROUP BY CURSOS.NOME, Data
+ORDER BY Curso, Data;
 
-            INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO)
-            VALUES (@aluno_id, @teste_id, @nota, @progresso);
 
-            SET @j = @j + 1;
-        END WHILE;
-
-        SET @i = @i + 1;
-    END WHILE;
-END$$
-
-DELIMITER ;
-
-CALL InsertRandomData();
-
+SELECT CURSOS.NOME AS Curso, 
+       SUM(Vendas * PRECO) AS ReceitaTotal
+FROM VENDAS_DIARIAS
+JOIN CURSOS ON CURSOS.ID = VENDAS_DIARIAS.CURSO_ID
+GROUP BY Curso;
 
 SELECT * FROM ALUNO_TESTES;
 
