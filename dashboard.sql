@@ -9,7 +9,8 @@ CREATE TABLE ALUNOS (
 
 CREATE TABLE CURSOS (
 	ID INT AUTO_INCREMENT PRIMARY KEY,
-    NOME VARCHAR(100) NOT NULL
+    NOME VARCHAR(100) NOT NULL,
+    PRECO DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE TESTES (
@@ -37,15 +38,23 @@ CREATE TABLE Visualizacoes (
   FOREIGN KEY (CURSO_ID) REFERENCES CURSOS(ID)
 );
 
-INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO) VALUES
-(1, 1, 3, 80);
+CREATE TABLE VENDAS_DIARIAS (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  CURSO_ID INT NOT NULL,
+  Data DATE NOT NULL,
+  Vendas INT NOT NULL,
+  FOREIGN KEY (CURSO_ID) REFERENCES CURSOS(ID)
+);
 
 
-INSERT INTO CURSOS (NOME) VALUES
-    ('Java'),
-    ('JavaScript'),
-    ('Python'),
-    ('C#');
+
+
+
+INSERT INTO CURSOS (NOME, PRECO) VALUES
+    ('Java', 99.99),
+    ('JavaScript', 79.99),
+    ('Python', 70.50),
+    ('C#', 109.99);
     
 INSERT INTO TESTES (CURSO_ID, NOME) VALUES
     (1, 'Teste de Java 1'),
@@ -56,26 +65,63 @@ INSERT INTO TESTES (CURSO_ID, NOME) VALUES
     (3, 'Teste de Python 2'),
     (4, 'Teste de C# 1'),
     (4, 'Teste de C# 2');
+    
+DELIMITER $$
+
+CREATE PROCEDURE InsertRandomData()
+BEGIN
+    SET @i = 1;
+
+    WHILE @i <= 200 DO
+        INSERT INTO ALUNOS (NOME, IDADE) VALUES
+            (CONCAT('Aluno_', @i), FLOOR(RAND() * 10) + 18);
+
+        SET @aluno_id = LAST_INSERT_ID();
+
+        SET @num_testes = FLOOR(RAND() * 4) + 1;
+
+        SET @j = 1;
+
+        WHILE @j <= @num_testes DO
+            SET @curso_id = FLOOR(RAND() * 4) + 1;
+
+            SET @teste_id = (SELECT ID FROM TESTES WHERE CURSO_ID = @curso_id ORDER BY RAND() LIMIT 1);
+
+            SET @nota = FLOOR(RAND() * 11);
+
+            IF @nota < 5 THEN
+                SET @progresso = FLOOR(RAND() * 50);
+            ELSE
+                SET @progresso = FLOOR(RAND() * (100 - 50) + 50);
+            END IF;
+
+            INSERT INTO ALUNO_TESTES (ALUNO_ID, TESTE_ID, NOTA, PROGRESSO_CURSO)
+            VALUES (@aluno_id, @teste_id, @nota, @progresso);
+
+            SET @j = @j + 1;
+        END WHILE;
+
+        SET @i = @i + 1;
+    END WHILE;
+END$$
+
+CALL InsertRandomData();
+
+delimiter ;
+
+select * from aluno_testes
+
+
 
 
 
 SELECT
-    ALUNOS.NOME AS ALUNO,
     CURSOS.NOME AS CURSO,
-    TESTES.NOME AS TESTE,
-    ALUNO_TESTES.NOTA
+    ALUNOS.NOME AS ALUNO,
+    AVG(ALUNO_TESTES.NOTA) AS MEDIA_NOTAS,
+    AVG(ALUNO_TESTES.PROGRESSO_CURSO) AS MEDIA_PROGRESSO
 FROM ALUNO_TESTES
 JOIN ALUNOS ON ALUNOS.ID = ALUNO_TESTES.ALUNO_ID
 JOIN TESTES ON TESTES.ID = ALUNO_TESTES.TESTE_ID
-JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID;
-
-select * from alunos;
-
-select * from aluno_testes;
-
-CREATE TABLE Professores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    senha VARCHAR(255) NOT NULL,
-    cpf CHAR(11) NOT NULL,
-    email VARCHAR(255) NOT NULL
-);
+JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID
+GROUP BY CURSOS.NOME, ALUNOS.NOME;
