@@ -3,7 +3,7 @@ const conectar = async () => {
         return global.conexao;
     }
     const mysql = require('mysql2/promise');
-    const con = mysql.createConnection("mysql://root:1234@localhost:3306/dashboard");
+    const con = mysql.createConnection("mysql://root:Cossiolo1@localhost:3306/dashboard");
     console.log('Conectou ao banco');
     global.conexao = con;
     return con;
@@ -126,4 +126,39 @@ const obterNotaPorProgresso = async () => {
     }
 };
 
-module.exports = { conectar, registrarProfessor, loginProfessor, obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso };
+const obterVendasDiarias = async () => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(`
+            SELECT CURSOS.NOME AS Curso, Data, SUM(Vendas) AS TotalVendas
+            FROM VENDAS_DIARIAS
+            JOIN CURSOS ON CURSOS.ID = VENDAS_DIARIAS.CURSO_ID
+            GROUP BY CURSOS.NOME, Data
+            ORDER BY Curso, Data;
+        `);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao obter dados de vendas diárias por curso:', error);
+        throw error;
+    }
+};
+
+
+const obterReceitaMensal = async () => {
+    try {
+        const con = await conectar();
+        const [rows] = await con.query(`
+            SELECT CURSOS.NOME AS Curso, 
+            SUM(Vendas * PRECO) AS ReceitaTotal
+            FROM VENDAS_DIARIAS
+            JOIN CURSOS ON CURSOS.ID = VENDAS_DIARIAS.CURSO_ID
+            GROUP BY Curso;
+        `);
+        return rows;
+    } catch (error) {
+        console.error('Erro ao obter dados de receita mensal por curso:', error);
+        throw error;
+    }
+}
+
+module.exports = { conectar, registrarProfessor, loginProfessor, obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso, obterVendasDiarias, obterReceitaMensal };

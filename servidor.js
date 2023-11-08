@@ -4,6 +4,8 @@ const { obterMediasDasNotas } = require('./db');
 const { obterProgressoDosAlunos } = require('./db');
 const { obterVisualizacoes } = require('./db');
 const { obterNotaPorProgresso } = require('./db');
+const { obterVendasDiarias } = require('./db');
+const { obterReceitaMensal } = require('./db');
 const path = require('path');
 
 
@@ -52,6 +54,24 @@ app.get('/obterNotaPorProgresso', async (req, res) =>{
         res.json(prog);
     } catch (error) {
         res.status(500).json({error: 'Erro ao obter o progresso e a nota dos alunos'});
+    }
+})
+
+app.get('/obterVendasDiarias', async (req, res) =>{
+    try {
+        const vendas = await obterVendasDiarias();
+        res.json(vendas);
+    } catch (error) {
+        res.status(500).json({error: 'Erro ao obter as vendas'});
+    }
+})
+
+app.get('/obterReceitaMensal', async (req, res) =>{
+    try {
+        const receita = await obterReceitaMensal();
+        res.json(receita);
+    } catch (error) {
+        res.status(500).json({error: 'Erro ao obter a receita'});
     }
 })
 
