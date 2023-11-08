@@ -3,7 +3,7 @@ const conectar = async () => {
         return global.conexao;
     }
     const mysql = require('mysql2/promise');
-    const con = mysql.createConnection("mysql://root:Cossiolo1@localhost:3306/dashboard");
+    const con = mysql.createConnection("mysql://root:1234@localhost:3306/dashboard");
     console.log('Conectou ao banco');
     global.conexao = con;
     return con;
