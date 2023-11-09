@@ -18,7 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
             Highcharts.chart('grafico1', {
                 chart: {
                     type: 'column',
-                    backgroundColor: "#c2c7ca"
+                    backgroundColor: "#c2c7ca",
+                    events: {
+                        load: function () {
+                            var button = this.renderer.button('Botão', 100, 10, function() {
+                                alert('Clique');
+                            })
+                        }
+                    }
                 },
                 title: {
                     text: 'Média das notas'
@@ -184,59 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao obter dados:', error);
         });
 });
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    Highcharts.chart('curso1', {
-        chart: {
-            type: 'solidgauge',
-            backgroundColor: "#c2c7ca"
-        },
-        title: {
-            text: 'Meta'
-        },
-        pane: {
-            startAngle: -90,
-            endAngle: 90,
-            background: [{
-                backgroundColor: '#ccc',
-                borderWidth: 0,
-                outerRadius: '109%'
-            }]
-        },
-        yAxis: {
-            min: 0,
-            max: 1000,
-            title: {
-                text: 'Valor'
-            },
-            stops: [
-                [0.1, '#55BF3B'],
-                [0.5, '#DDDF0D'],
-                [0.9, '#DF5353']
-            ],
-            lineWidth: 0,
-            minorTickInterval: null,
-            tickAmount: 2,
-            labels: {
-                y: 16
-            }
-        },
-        series: [{
-            name: 'Meta',
-            data: [500],
-            dataLabels: {
-                format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
-                    '<span style="font-size:12px;color:silver">Valor</span></div>'
-            }
-        }]
-    });
-});
-
-
-
 
 
 function cores(chartData) {

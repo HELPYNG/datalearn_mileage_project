@@ -114,29 +114,34 @@ body {
       'menu curso2 curso2 curso2 curso2 curso2 curso2'
       ;
 
-    column-gap: 10px;
+      column-gap: 10px;
+      row-gap: 10px;
+      height: 100vh;
     
     height: 100vh;
     grid-template-columns: repeat(7, 1fr);
-    
+    grid-template-rows: min-content auto min-content;
 }
 
 .curso1 {
     background-color: #c2c7ca;
     margin-top: 10px;
+    height: 500px;
     border-radius: 20px;
 }
 
 .curso2 {
     background-color: #c2c7ca;
-    margin-top: 10px;
+    height: 400px;
     margin-bottom: 15px;
+    margin-right: 10px;
     border-radius: 20px;
 }
 
 .curso3 {
     background-color: #c2c7ca;
     margin-top: 10px;
+    height: 500px;
     margin-right: 10px;
     border-radius: 20px;
 }
