@@ -195,4 +195,6 @@ GROUP BY Curso;
 
 SELECT * FROM ALUNO_TESTES;
 
-SELECT * FROM Professores;
+update cursos set nome = 'aaaa' where id = 4
+
+

@@ -105,11 +105,13 @@ BEGIN
     END WHILE;
 END$$
 
+DELIMITER ;
+
+
 CALL InsertRandomData();
 
-delimiter ;
 
-select * from aluno_testes
+select * from aluno_testes;
 
 
 
@@ -125,3 +127,6 @@ JOIN ALUNOS ON ALUNOS.ID = ALUNO_TESTES.ALUNO_ID
 JOIN TESTES ON TESTES.ID = ALUNO_TESTES.TESTE_ID
 JOIN CURSOS ON CURSOS.ID = TESTES.CURSO_ID
 GROUP BY CURSOS.NOME, ALUNOS.NOME;
+
+
+select * from cursos

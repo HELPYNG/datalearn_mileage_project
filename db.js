@@ -161,4 +161,8 @@ const obterReceitaMensal = async () => {
     }
 }
 
+
+/*const obterAvaliacaoAlunos*/
+
+
 module.exports = { conectar, registrarProfessor, loginProfessor, obterMediasDasNotas, obterProgressoDosAlunos, obterVisualizacoes, obterNotaPorProgresso, obterVendasDiarias, obterReceitaMensal };
