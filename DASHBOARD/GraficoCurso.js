@@ -1,3 +1,45 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const dadosMediasCursos = [
+        { curso: 'C#', media: 4.1, color: 'blue' },
+        { curso: 'Java', media: 5.0, color: 'grey' },
+        { curso: 'JavaScript', media: 4.2, color: 'orange' },
+        { curso: 'Python', media: 2.8, color: 'green' },
+    ];
+
+    const cursos = dadosMediasCursos.map(item => item.curso);
+    const medias = dadosMediasCursos.map(item => ({
+        y: item.media,
+        color: item.color,
+    }));
+
+    Highcharts.chart('curso1', {
+        chart: {
+            type: 'column',
+            backgroundColor: "#c2c7ca"
+        },
+        title: {
+            text: 'Avaliações dos Cursos'
+        },
+        xAxis: {
+            categories: cursos,
+            title: {
+                text: 'Cursos'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Média de Avaliações'
+            },
+            max: 5
+        },
+        series: [{
+            name: 'Médias',
+            data: medias
+        }]
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     fetch('/obterVendasDiarias')
         .then(response => {
@@ -75,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const cursos = data.map(item => item.Curso);
             const receitas = data.map(item => parseFloat(item.ReceitaTotal));
+            
+            // Chame a função cores para mapear as cores com base nos nomes dos cursos
+            const coresGrafico = cores(cursos);
 
             Highcharts.chart('curso3', {
                 chart: {
@@ -82,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: "#c2c7ca"
                 },
                 title: {
-                    text: 'Receita  por Curso'
+                    text: 'Receita por Curso'
                 },
                 xAxis: {
                     categories: cursos,
@@ -93,6 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 yAxis: {
                     title: {
                         text: 'Receita Total'
+                    }
+                },
+                // Defina as cores com base no resultado da função cores
+                plotOptions: {
+                    series: {
+                        colorByPoint: true,
+                        colors: coresGrafico,
                     }
                 },
                 series: [{
@@ -107,3 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao obter dados de receita mensal:', error);
         });
 });
+
+
+function cores(cursos) {
+    return cursos.map(curso => {
+        let color;
+        if (curso === 'Java') {
+            color = 'grey';
+        } else if (curso === 'Python') {
+            color = 'green';
+        } else if (curso === 'C#') {
+            color = 'blue'; // Defina a cor desejada para C#
+        } else if (curso === 'JavaScript') {
+            color = 'orange';
+        }
+        return color;
+    });
+}
